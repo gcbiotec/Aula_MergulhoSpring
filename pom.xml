@@ -46,6 +46,13 @@
 			<version>8.0.21</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
+
+
 
 	</dependencies>
 
