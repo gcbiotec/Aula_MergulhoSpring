@@ -2,6 +2,7 @@ package com.aula_algaworks.algalog.api.controller;
 
 import com.aula_algaworks.algalog.domain.model.Cliente;
 import com.aula_algaworks.algalog.domain.repository.ClienteRepository;
+import com.aula_algaworks.algalog.domain.service.CatalogoClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class Cliente_Controller {
 //    Vamos injetar uma instancia..
         //@Autowired
         ClienteRepository clienteRepository;
+        CatalogoClienteService catalogoClienteService;
 
 //    Outra forma de injetar dependencias é através de constructor, pois permite realizar testes:
         public Cliente_Controller(ClienteRepository clienteRepository) {
@@ -33,10 +35,9 @@ public class Cliente_Controller {
     @GetMapping
     public List<Cliente> listar() {
         // Aqui está herdando as funcionalidades do JpaRepository como findAll, getById.. etc
-        // Podemos também criar nosso proprios métodos la no Repository
+        // Podemos também criar nosso proprios métodos lá no Repository
 
         return clienteRepository.findAll();
-
 //      return manager.createNamedQuery("from cliente", Cliente.class).getResultList();
     }
 
@@ -52,7 +53,9 @@ public class Cliente_Controller {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@RequestBody Cliente cliente){
-            return clienteRepository.save(cliente);
+
+//    return clienteRepository.save(cliente);
+      return catalogoClienteService.salvar(cliente);
     }
 
     // Obs: O método POST precisa pegar o cliente, e depois passar as novas infos;
@@ -62,19 +65,23 @@ public class Cliente_Controller {
             if (!clienteRepository.existsById(clienteId)){
                 return ResponseEntity.notFound().build();
             }
-            cliente.setId(clienteId);
-            cliente = clienteRepository.save(cliente);
-            return ResponseEntity.ok(cliente);
+              cliente.setId(clienteId);
+//            cliente = clienteRepository.save(cliente);
+              cliente = catalogoClienteService.salvar(cliente);
+              return ResponseEntity.ok(cliente);
     }
+
     @DeleteMapping("/{clienteId}")
     public ResponseEntity<Void> deletar(@PathVariable Long clienteId){
             if (!clienteRepository.existsById(clienteId)){
                 return ResponseEntity.notFound().build();
             }
-            clienteRepository.deleteById(clienteId);
+            //clienteRepository.deleteById(clienteId);
+              catalogoClienteService.excluir(clienteId);
             return ResponseEntity.noContent().build();
     }
 }
+
 //        Cliente cliente1 = new Cliente();
 //        cliente1.setId(1L);
 //        cliente1.setNome("Joao");
