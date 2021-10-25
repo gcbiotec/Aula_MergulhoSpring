@@ -1,6 +1,9 @@
 package com.aula_algaworks.algalog.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -12,10 +15,17 @@ public class Cliente {
     private Long id;
 
     @Column(name = "nome")
+    @NotBlank
+    @Size(max = 60)
     private String nome;
 
+    @NotBlank
+    @Email
+    @Size(max = 200)
     private String email;
 
+    @NotBlank
+    @Size(max = 60)
     @Column(name = "fone")
     private String telefone;
 
